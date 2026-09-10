@@ -20,3 +20,18 @@ async function setup(){
     chunks=[]; audio=new Audio(URL.createObjectURL(blob));
     status.textContent='Sample ready.';
   };
+}
+record.onclick=async()=>{if(!rec)await setup();chunks=[];rec.start();status.textContent='Recording...';};
+stopRec.onclick=()=>{if(rec&&rec.state==='recording')rec.stop();};
+play.onclick=()=>{
+  clearInterval(timer);index=0;
+  timer=setInterval(()=>{
+    steps.forEach(s=>s.classList.remove('playing'));
+    const s=steps[index];
+    s.classList.add('playing');
+    if(s.classList.contains('on')&&audio){audio.currentTime=0;audio.play();}
+    index=(index+1)%8;
+  },350);
+  status.textContent='Sequence playing.';
+};
+stop.onclick=()=>{clearInterval(timer);steps.forEach(s=>s.classList.remove('playing'));status.textContent='Stopped.';};
