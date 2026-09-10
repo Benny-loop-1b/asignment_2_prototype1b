@@ -1,31 +1,29 @@
-
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prototype 1B — Circular Loop</title>
+<title>Prototype 1C — Step Loop</title>
 <link rel="stylesheet" href="../style.css">
 </head>
 <body>
 <header>
-<h1>Prototype 1B — Circular Loop</h1>
-<p>A visual loop that moves around eight beats</p>
+<h1>Prototype 1C — Step Loop</h1>
+<p>Direct control over an eight-step rhythm</p>
 </header>
 <main>
 <a class="button secondary" href="../index.html">← Back</a>
 
 <div class="panel">
-<h2>Circular Rhythm</h2>
-<p>The loop is shown as eight beats around a circle. The active beat moves around the ring.</p>
+
 <div class="controls">
 <button id="record">Record Sample</button>
 <button id="stopRec" class="secondary">Stop Recording</button>
-<button id="start">Start Loop</button>
+<button id="play">Play Sequence</button>
 <button id="stop" class="secondary">Stop</button>
 </div>
-<div id="circle" class="circle"></div>
-<div id="status" class="status">Record a sample, then start the loop.</div>
+<div id="steps" class="steps"></div>
+<div id="status" class="status">Choose some steps and record a sample.</div>
 </div>
 
 </main>
