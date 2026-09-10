@@ -11,3 +11,15 @@ async function setup(){
     audio=new Audio(URL.createObjectURL(blob));
     status.textContent='Recording ready.';
   };
+record.onclick=async()=>{
+  if(!rec) await setup();
+  chunks=[]; rec.start(); status.textContent='Recording...';
+};
+stopRec.onclick=()=>{ if(rec && rec.state==='recording') rec.stop(); };
+play.onclick=()=>{
+  if(!audio){status.textContent='Record a sound first.';return;}
+  clearInterval(timer);
+  audio.currentTime=0; audio.play();
+  timer=setInterval(()=>{audio.currentTime=0;audio.play();},2000);
+  status.textContent='Loop playing.';
+};
