@@ -13,7 +13,17 @@
   <nav>
     <a href="../assignment2.html">← Back to Assignment 2</a>
   </nav>
-</header><main>
+</header>
+
+<main>
+
+<section class="intro">
+  <h2>Visual Feedback</h2>
+  <p>
+    This version uses a live volume meter and pulsing circle to make microphone
+    activity visible.
+  </p>
+</section>
 
 <section>
   <div class="prototype-stage">
@@ -21,3 +31,23 @@
       <button id="startBtn">Start Microphone</button>
       <button id="stopBtn" class="secondary">Stop</button>
     </div>
+
+    <div class="meter">
+      <div id="bar" class="meter-fill"></div>
+    </div>
+
+    <div id="pulse" class="pulse"></div>
+
+    <div id="status" class="status">
+      Microphone is off.
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>Loop Together · Parallel Prototype</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
