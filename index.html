@@ -1,33 +1,51 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prototype 1A — Button Loop</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prototype 1B</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header>
-<h1>Prototype 1A — Button Loop</h1>
-<p>Simple media-style loop controls</p>
+  <h1>Prototype 1B</h1>
+  <p>Circular Loop</p>
+  <nav>
+    <a href="../assignment2.html">← Back to Assignment 2</a>
+  </nav>
 </header>
-<main>
-<a class="button secondary" href="../index.html">← Back</a>
 
-<div class="panel">
-<h2>Record and Repeat</h2>
-<p>This version uses familiar controls so a beginner can record a short sound and hear it repeat.</p>
-<div class="controls">
-<button id="record">Record</button>
-<button id="stopRec" class="secondary">Stop Recording</button>
-<button id="play">Play Loop</button>
-<button id="stopLoop" class="secondary">Stop Loop</button>
-</div>
-<div id="status" class="status">Ready.</div>
-</div>
+<main>
+
+<section class="intro">
+  <h2>Circular Loop</h2>
+  <p>
+    This version visualises an eight-beat loop as a circle so repetition can
+    be understood through movement.
+  </p>
+</section>
+
+<section>
+  <div class="prototype-stage">
+    <div class="controls">
+      <button id="recordBtn">Record Sample</button>
+      <button id="stopRecordBtn" class="secondary">Stop Recording</button>
+      <button id="startBtn">Start Circle</button>
+      <button id="stopBtn" class="secondary">Stop</button>
+    </div>
+
+    <div id="circle" class="circle-loop"></div>
+
+    <div id="status" class="status">
+      Record a sample, then start the circular loop.
+    </div>
+  </div>
+</section>
 
 </main>
+
 <footer>Loop Together · Parallel Prototype</footer>
+
 <script src="script.js"></script>
 </body>
 </html>
