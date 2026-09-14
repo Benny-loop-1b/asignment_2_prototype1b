@@ -6,41 +6,56 @@ let animationFrame;
 const bar = document.querySelector("#bar");
 const pulse = document.querySelector("#pulse");
 const status = document.querySelector("#status");
+const startBtn = document.querySelector("#startBtn");
+const stopBtn = document.querySelector("#stopBtn");
 
-document.querySelector("#startBtn").addEventListener("click", async function () {
-  stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+startBtn.addEventListener("click", async function () {
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({
+      audio: {
+        echoCancellation: false,
+        noiseSuppression: false,
+        autoGainControl: true
+      }
+    });
 
-  audioContext = new AudioContext();
-  analyser = audioContext.createAnalyser();
+    audioContext = new AudioContext();
+    analyser = audioContext.createAnalyser();
 
-  const source = audioContext.createMediaStreamSource(stream);
-  source.connect(analyser);
+    const source = audioContext.createMediaStreamSource(stream);
+    source.connect(analyser);
 
-  analyser.fftSize = 256;
+    analyser.fftSize = 256;
+    analyser.smoothingTimeConstant = 0.7;
 
-  const data = new Uint8Array(analyser.frequencyBinCount);
+    const data = new Uint8Array(analyser.frequencyBinCount);
 
-  status.textContent = "Listening... speak, clap or tap.";
+    status.textContent = "Listening... speak, clap or tap.";
 
-  function updateVisuals() {
-    analyser.getByteFrequencyData(data);
+    function updateVisuals() {
+      analyser.getByteFrequencyData(data);
 
-    const average = data.reduce(function (total, value) {
-      return total + value;
-    }, 0) / data.length;
+      const average = data.reduce(function (total, value) {
+        return total + value;
+      }, 0) / data.length;
 
-    const percent = Math.min(100, average * 1.6);
+      const percent = Math.min(100, average * 2.5);
 
-    bar.style.width = percent + "%";
-    pulse.style.transform = "scale(" + (0.7 + percent / 180) + ")";
+      bar.style.width = percent + "%";
+      pulse.style.transform = "scale(" + (0.7 + percent / 140) + ")";
 
-    animationFrame = requestAnimationFrame(updateVisuals);
+      animationFrame = requestAnimationFrame(updateVisuals);
+    }
+
+    updateVisuals();
+
+  } catch (error) {
+    console.error(error);
+    status.textContent = "Microphone error: " + error.name;
   }
-
-  updateVisuals();
 });
 
-document.querySelector("#stopBtn").addEventListener("click", function () {
+stopBtn.addEventListener("click", function () {
   cancelAnimationFrame(animationFrame);
 
   if (stream) {
