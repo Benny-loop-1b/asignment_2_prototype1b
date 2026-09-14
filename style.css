@@ -1,0 +1,175 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f2f2f2;
+  color: #222;
+  line-height: 1.5;
+}
+
+header {
+  background: #222;
+  color: white;
+  padding: 30px 40px;
+}
+
+header h1 {
+  margin: 0;
+}
+
+header p {
+  color: #ccc;
+  margin-top: 6px;
+}
+
+main {
+  width: 90%;
+  max-width: 900px;
+  margin: auto;
+  padding: 30px 0;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+.button {
+  padding: 9px 14px;
+  background: #222;
+  color: white;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+  margin: 4px;
+}
+
+button.secondary,
+.button.secondary {
+  background: #ccc;
+  color: #222;
+}
+
+.panel {
+  background: white;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+}
+
+.status {
+  background: #e8e8e8;
+  padding: 10px;
+  margin-top: 15px;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 15px 0;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 6px;
+  margin-top: 20px;
+}
+
+.step {
+  background: #ddd;
+  border: 1px solid #aaa;
+  padding: 18px 0;
+  text-align: center;
+  cursor: pointer;
+}
+
+.step.on {
+  background: #222;
+  color: white;
+}
+
+.step.playing {
+  border: 3px solid #666;
+}
+
+.circle {
+  width: 260px;
+  height: 260px;
+  border: 2px solid #aaa;
+  border-radius: 50%;
+  position: relative;
+  margin: 30px auto;
+}
+
+.beat {
+  width: 36px;
+  height: 36px;
+  background: #ddd;
+  border-radius: 50%;
+  position: absolute;
+  text-align: center;
+  line-height: 36px;
+}
+
+.beat.active {
+  background: #222;
+  color: white;
+}
+
+.meter {
+  height: 20px;
+  background: #ddd;
+  margin: 20px 0;
+}
+
+.meter-fill {
+  height: 100%;
+  width: 0;
+  background: #222;
+}
+
+.pulse {
+  width: 90px;
+  height: 90px;
+  background: #222;
+  border-radius: 50%;
+  margin: 25px auto;
+  transform: scale(0.7);
+}
+
+.guide {
+  background: #eee;
+  padding: 20px;
+  text-align: center;
+}
+
+canvas {
+  width: 100%;
+  height: 250px;
+  background: #222;
+}
+
+footer {
+  background: #222;
+  color: #ccc;
+  padding: 20px 40px;
+}
+
+@media (max-width: 650px) {
+  .steps {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  main {
+    width: 92%;
+  }
+
+  header {
+    padding: 25px;
+  }
+}
