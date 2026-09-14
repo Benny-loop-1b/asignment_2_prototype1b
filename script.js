@@ -1,31 +1,48 @@
-
-let rec, chunks = [], audio, timer, index = 0, stream;
+let recorder;
+let chunks = [];
+let recordedAudio;
+let stream;
+let timer;
+let currentBeat = 0;
 
 const circle = document.querySelector("#circle");
 const status = document.querySelector("#status");
+
 const recordBtn = document.querySelector("#record");
 const stopRecBtn = document.querySelector("#stopRec");
 const startBtn = document.querySelector("#start");
 const stopBtn = document.querySelector("#stop");
 
 for (let i = 0; i < 8; i++) {
-  const b = document.createElement("div");
-  b.className = "beat";
-  b.textContent = i + 1;
+  const beat = document.createElement("div");
+
+  beat.className = "beat";
+  beat.textContent = i + 1;
 
   const angle = (Math.PI * 2 / 8) * i - Math.PI / 2;
-  const r = 112;
+  const radius = 105;
 
-  b.style.left = (118 + Math.cos(angle) * r) + "px";
-  b.style.top = (118 + Math.sin(angle) * r) + "px";
+  beat.style.left =
+    (112 + Math.cos(angle) * radius) + "px";
 
-  circle.appendChild(b);
+  beat.style.top =
+    (112 + Math.sin(angle) * radius) + "px";
+
+  circle.appendChild(beat);
 }
 
-const beats = [...document.querySelectorAll(".beat")];
+const beats = document.querySelectorAll(".beat");
 
-async function setup() {
+recordBtn.onclick = async function () {
   try {
+    if (timer) {
+      clearInterval(timer);
+    }
+
+    if (recordedAudio) {
+      recordedAudio.pause();
+    }
+
     stream = await navigator.mediaDevices.getUserMedia({
       audio: {
         echoCancellation: false,
@@ -34,77 +51,121 @@ async function setup() {
       }
     });
 
-    rec = new MediaRecorder(stream);
+    chunks = [];
 
-    rec.ondataavailable = e => {
-      if (e.data.size > 0) chunks.push(e.data);
+    recorder = new MediaRecorder(stream);
+
+    recorder.ondataavailable = function (event) {
+      if (event.data.size > 0) {
+        chunks.push(event.data);
+      }
     };
 
-    rec.onstop = () => {
-      const blob = new Blob(chunks, { type: rec.mimeType });
-      chunks = [];
+    recorder.onstop = function () {
+      const blob = new Blob(chunks, {
+        type: recorder.mimeType
+      });
 
-      audio = new Audio(URL.createObjectURL(blob));
-      audio.volume = 1;
+      const audioURL =
+        URL.createObjectURL(blob);
 
-      status.textContent = "Sample ready.";
+      recordedAudio =
+        new Audio(audioURL);
 
-      stream.getTracks().forEach(track => track.stop());
+      recordedAudio.volume = 1;
+
+      status.textContent =
+        "Recording ready. Press Start Loop.";
+
+      stream.getTracks().forEach(function (track) {
+        track.stop();
+      });
     };
+
+    recorder.start();
+
+    status.textContent =
+      "Recording...";
 
   } catch (error) {
     console.error(error);
-    status.textContent = "Microphone error: " + error.name;
-  }
-}
 
-recordBtn.onclick = async () => {
-  await setup();
-  chunks = [];
-  rec.start();
-  status.textContent = "Recording...";
-};
-
-stopRecBtn.onclick = () => {
-  if (rec && rec.state === "recording") {
-    rec.stop();
-    status.textContent = "Processing...";
+    status.textContent =
+      "Microphone error: " + error.name;
   }
 };
 
-startBtn.onclick = () => {
-  if (!audio) {
-    status.textContent = "Record a sample first.";
+stopRecBtn.onclick = function () {
+  if (
+    recorder &&
+    recorder.state === "recording"
+  ) {
+    recorder.stop();
+
+    status.textContent =
+      "Processing recording...";
+  }
+};
+
+startBtn.onclick = function () {
+  if (!recordedAudio) {
+    status.textContent =
+      "Please record a sound first.";
     return;
   }
 
   clearInterval(timer);
-  index = 0;
 
-  timer = setInterval(() => {
-    beats.forEach(b => b.classList.remove("active"));
-    beats[index].classList.add("active");
+  currentBeat = 0;
 
-    if (index === 0) {
-      audio.currentTime = 0;
-      audio.play();
-    }
+  beats.forEach(function (beat) {
+    beat.classList.remove("active");
+  });
 
-    index = (index + 1) % 8;
-  }, 350);
+  runBeat();
 
-  status.textContent = "Circular loop running.";
+  timer = setInterval(
+    runBeat,
+    400
+  );
+
+  status.textContent =
+    "Circular loop running.";
 };
 
-stopBtn.onclick = () => {
-  clearInterval(timer);
+function runBeat() {
+  beats.forEach(function (beat) {
+    beat.classList.remove("active");
+  });
 
-  beats.forEach(b => b.classList.remove("active"));
+  beats[currentBeat]
+    .classList.add("active");
 
-  if (audio) {
-    audio.pause();
-    audio.currentTime = 0;
+  if (currentBeat === 0) {
+    recordedAudio.currentTime = 0;
+
+    recordedAudio.play()
+      .catch(function (error) {
+        console.error(error);
+      });
   }
 
-  status.textContent = "Stopped.";
+  currentBeat =
+    (currentBeat + 1) % 8;
+}
+
+stopBtn.onclick = function () {
+  clearInterval(timer);
+
+  beats.forEach(function (beat) {
+    beat.classList.remove("active");
+  });
+
+  if (recordedAudio) {
+    recordedAudio.pause();
+    recordedAudio.currentTime = 0;
+  }
+
+  status.textContent =
+    "Loop stopped.";
 };
