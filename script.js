@@ -1,174 +1,143 @@
-let mediaRecorder;
-let audioChunks = [];
-let recordedAudio;
-let mediaStream;
+document.addEventListener("DOMContentLoaded", function () {
+
+  let recorder;
+  let chunks = [];
+  let audio;
+  let stream;
+
+  const recordBtn = document.getElementById("record");
+  const stopRecBtn = document.getElementById("stopRec");
+  const playBtn = document.getElementById("play");
+  const stopLoopBtn = document.getElementById("stopLoop");
+  const statusText = document.getElementById("status");
 
 
-// Get buttons from HTML
-const recordBtn = document.querySelector("#record");
-const stopRecBtn = document.querySelector("#stopRec");
-const playBtn = document.querySelector("#play");
-const stopLoopBtn = document.querySelector("#stopLoop");
-const statusText = document.querySelector("#status");
+  // Record
+  recordBtn.onclick = async function () {
 
+    statusText.textContent = "Requesting microphone...";
 
-// RECORD
-recordBtn.addEventListener("click", async () => {
+    try {
 
-  try {
-
-    // Ask the browser for microphone permission
-    mediaStream = await navigator.mediaDevices.getUserMedia({
-      audio: true
-    });
-
-
-    audioChunks = [];
-
-
-    // Create recorder
-    mediaRecorder = new MediaRecorder(mediaStream);
-
-
-    // Save recorded audio data
-    mediaRecorder.addEventListener("dataavailable", (event) => {
-
-      if (event.data.size > 0) {
-        audioChunks.push(event.data);
-      }
-
-    });
-
-
-    // When recording stops
-    mediaRecorder.addEventListener("stop", () => {
-
-      const audioBlob = new Blob(
-        audioChunks,
-        {
-          type: mediaRecorder.mimeType
-        }
-      );
-
-
-      const audioURL = URL.createObjectURL(audioBlob);
-
-
-      recordedAudio = new Audio(audioURL);
-
-
-      // Make the recording repeat
-      recordedAudio.loop = true;
-
-
-      statusText.textContent =
-        "Recording ready. Press Play Loop.";
-
-
-      // Turn microphone off after recording
-      mediaStream.getTracks().forEach((track) => {
-
-        track.stop();
-
+      stream = await navigator.mediaDevices.getUserMedia({
+        audio: true
       });
 
-    });
+      chunks = [];
+
+      recorder = new MediaRecorder(stream);
 
 
-    // Start recording
-    mediaRecorder.start();
+      recorder.ondataavailable = function (event) {
+
+        if (event.data.size > 0) {
+          chunks.push(event.data);
+        }
+
+      };
 
 
-    statusText.textContent = "Recording...";
+      recorder.onstop = function () {
 
-  }
+        const blob = new Blob(chunks, {
+          type: recorder.mimeType
+        });
 
-  catch (error) {
+        const audioURL = URL.createObjectURL(blob);
 
-    console.error(error);
+        audio = new Audio(audioURL);
+
+        audio.loop = true;
+
+        statusText.textContent = "Recording ready.";
+
+        // Turn microphone off
+        stream.getTracks().forEach(function (track) {
+          track.stop();
+        });
+
+      };
 
 
-    if (error.name === "NotAllowedError") {
+      recorder.start();
 
-      statusText.textContent =
-        "Microphone permission is blocked. Please allow microphone access.";
+      statusText.textContent = "Recording...";
 
     }
 
-    else if (error.name === "NotFoundError") {
+    catch (error) {
 
-      statusText.textContent =
-        "No microphone was found.";
-
-    }
-
-    else {
+      console.log(error);
 
       statusText.textContent =
         "Microphone error: " + error.name;
 
     }
 
-  }
-
-});
+  };
 
 
-// STOP RECORDING
-stopRecBtn.addEventListener("click", () => {
+  // Stop recording
+  stopRecBtn.onclick = function () {
 
-  if (
-    mediaRecorder &&
-    mediaRecorder.state === "recording"
-  ) {
+    if (
+      recorder &&
+      recorder.state === "recording"
+    ) {
 
-    mediaRecorder.stop();
+      recorder.stop();
+
+      statusText.textContent =
+        "Processing recording...";
+
+    }
+
+    else {
+
+      statusText.textContent =
+        "You are not recording.";
+
+    }
+
+  };
+
+
+  // Play loop
+  playBtn.onclick = function () {
+
+    if (!audio) {
+
+      statusText.textContent =
+        "Record a sound first.";
+
+      return;
+
+    }
+
+    audio.currentTime = 0;
+
+    audio.play();
 
     statusText.textContent =
-      "Processing recording...";
+      "Loop playing.";
 
-  }
-
-});
+  };
 
 
-// PLAY LOOP
-playBtn.addEventListener("click", () => {
+  // Stop loop
+  stopLoopBtn.onclick = function () {
 
-  if (!recordedAudio) {
+    if (audio) {
+
+      audio.pause();
+
+      audio.currentTime = 0;
+
+    }
 
     statusText.textContent =
-      "Record a sound first.";
+      "Loop stopped.";
 
-    return;
-
-  }
-
-
-  recordedAudio.currentTime = 0;
-
-  recordedAudio.play();
-
-
-  statusText.textContent =
-    "Loop playing.";
-
-});
-
-
-// STOP LOOP
-stopLoopBtn.addEventListener("click", () => {
-
-  if (recordedAudio) {
-
-    recordedAudio.pause();
-
-    recordedAudio.currentTime = 0;
-
-  }
-
-
-  statusText.textContent =
-    "Loop stopped.";
+  };
 
 });
