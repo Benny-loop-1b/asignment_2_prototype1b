@@ -5,49 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Prototype 2A</title>
   <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
-<header>
-  <h1>Prototype 2A</h1>
-  <p>Visual Feedback</p>
-  <nav>
+  <header>
+    <h1>Prototype 2A</h1>
+    <p>Visual Feedback</p>
     <a href="../assignment2.html">← Back to Assignment 2</a>
-  </nav>
-</header>
+  </header>
 
-<main>
+  <main>
+    <section class="intro">
+      <h2>See Your Sound</h2>
+      <p>Start the microphone, then speak or clap to move the bar and circle.</p>
+    </section>
 
-<section class="intro">
-  <h2>Visual Feedback</h2>
-  <p>
-    This version uses a live volume meter and pulsing circle to make microphone
-    activity visible.
-  </p>
-</section>
+    <section class="prototype-stage">
+      <div class="controls">
+        <button id="startBtn" type="button">Start Microphone</button>
+        <button id="stopBtn" type="button" class="secondary">Stop</button>
+      </div>
 
-<section>
-  <div class="prototype-stage">
-    <div class="controls">
-      <button id="startBtn">Start Microphone</button>
-      <button id="stopBtn" class="secondary">Stop</button>
-    </div>
+      <div class="meter">
+        <div id="bar" class="meter-fill"></div>
+      </div>
 
-    <div class="meter">
-      <div id="bar" class="meter-fill"></div>
-    </div>
+      <div id="pulse" class="pulse"></div>
 
-    <div id="pulse" class="pulse"></div>
+      <div id="status" class="status" role="status">
+        Microphone is off.
+      </div>
+    </section>
+  </main>
 
-    <div id="status" class="status">
-      Microphone is off.
-    </div>
-  </div>
-</section>
-
-</main>
-
-<footer>Loop Together · Parallel Prototype</footer>
-
-<script src="script.js"></script>
+  <footer>Loop Together · Parallel Prototype</footer>
 </body>
 </html>
