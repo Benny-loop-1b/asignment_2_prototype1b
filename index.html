@@ -2,50 +2,95 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prototype 1A</title>
-  <link rel="stylesheet" href="style.css">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Prototype 1A – Button Loop</title>
+
+  <link rel="stylesheet" href="./style.css">
+
+  <!-- defer makes JavaScript wait until HTML has loaded. -->
+  <script src="./script.js" defer></script>
 </head>
+
 <body>
-<header>
-  <h1>Prototype 1A</h1>
-  <p>Button Loop</p>
-  <nav>
-    <a href="../assignment2.html">← Back to Assignment 2</a>
-  </nav>
-</header>
+  <header>
+    <h1>Prototype 1A</h1>
+    <p>Button Loop</p>
 
-<main>
+    <nav>
+      <a href="../assignment2.html">
+        ← Back to Assignment 2
+      </a>
+    </nav>
+  </header>
 
-<section class="intro">
-  <h2>Button Loop</h2>
-  <p>
-    This prototype explores familiar media controls as a simple way to record
-    and repeat a sound.
-  </p>
-</section>
+  <main>
+    <section class="intro">
+      <h2>Button Loop</h2>
 
-<section>
-  <div class="prototype-stage">
-    <h2>Record a Short Sound</h2>
+      <p>
+        This prototype explores familiar media controls as a
+        simple way to record and repeat a sound.
+      </p>
+    </section>
 
-    <div class="controls">
-      <button id="recordBtn">Record</button>
-      <button id="stopRecordBtn" class="secondary">Stop Recording</button>
-      <button id="playBtn">Play Loop</button>
-      <button id="stopBtn" class="secondary">Stop Loop</button>
-    </div>
+    <section>
+      <div class="prototype-stage">
+        <h2>Record a Short Sound</h2>
 
-    <div id="status" class="status">
-      Ready. Allow microphone access when asked.
-    </div>
-  </div>
-</section>
+        <div class="controls">
+          <button
+            id="recordBtn"
+            type="button"
+          >
+            Record
+          </button>
 
-</main>
+          <button
+            id="stopRecordBtn"
+            class="secondary"
+            type="button"
+            disabled
+          >
+            Stop Recording
+          </button>
 
-<footer>Loop Together · Parallel Prototype</footer>
+          <button
+            id="playBtn"
+            type="button"
+            disabled
+          >
+            Play Loop
+          </button>
 
-<script src="script.js"></script>
+          <button
+            id="stopBtn"
+            class="secondary"
+            type="button"
+            disabled
+          >
+            Stop Loop
+          </button>
+        </div>
+
+        <div
+          id="status"
+          class="status"
+          role="status"
+          aria-live="polite"
+        >
+          Ready. Allow microphone access when asked.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Loop Together · Parallel Prototype
+  </footer>
 </body>
 </html>
