@@ -2,50 +2,84 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prototype 1B</title>
-  <link rel="stylesheet" href="style.css">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Prototype 1B – Circular Loop</title>
+
+  <link rel="stylesheet" href="./style.css">
 </head>
+
 <body>
-<header>
-  <h1>Prototype 1B</h1>
-  <p>Circular Loop</p>
-  <nav>
-    <a href="../assignment2.html">← Back to Assignment 2</a>
-  </nav>
-</header>
+  <header>
+    <h1>Prototype 1B</h1>
+    <p>Circular Loop</p>
 
-<main>
+    <nav>
+      <a href="../assignment2.html">
+        ← Back to Assignment 2
+      </a>
+    </nav>
+  </header>
 
-<section class="intro">
-  <h2>Circular Loop</h2>
-  <p>
-    This version visualises an eight-beat loop as a circle so repetition can
-    be understood through movement.
-  </p>
-</section>
+  <main>
+    <section class="intro">
+      <h2>Circular Loop</h2>
 
-<section>
-  <div class="prototype-stage">
-    <div class="controls">
-      <button id="recordBtn">Record Sample</button>
-      <button id="stopRecordBtn" class="secondary">Stop Recording</button>
-      <button id="startBtn">Start Circle</button>
-      <button id="stopBtn" class="secondary">Stop</button>
-    </div>
+      <p>
+        This version visualises an eight-beat loop as a circle,
+        so repetition can be understood through movement.
+      </p>
+    </section>
 
-    <div id="circle" class="circle-loop"></div>
+    <section>
+      <div class="prototype-stage">
+        <div class="controls">
+          <!-- These IDs match the original JavaScript. -->
+          <button id="record" type="button">
+            Record Sample
+          </button>
 
-    <div id="status" class="status">
-      Record a sample, then start the circular loop.
-    </div>
-  </div>
-</section>
+          <button
+            id="stopRec"
+            class="secondary"
+            type="button"
+          >
+            Stop Recording
+          </button>
 
-</main>
+          <button id="start" type="button">
+            Start Circle
+          </button>
 
-<footer>Loop Together · Parallel Prototype</footer>
+          <button
+            id="stop"
+            class="secondary"
+            type="button"
+          >
+            Stop
+          </button>
+        </div>
 
-<script src="script.js"></script>
+        <!-- JavaScript creates the eight beat elements here. -->
+        <div id="circle" class="circle-loop"></div>
+
+        <!-- JavaScript updates this message while recording. -->
+        <div id="status" class="status">
+          Record a sample, then start the circular loop.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Loop Together · Parallel Prototype
+  </footer>
+
+  <!-- Load JavaScript after all HTML elements are created. -->
+  <script src="./script.js"></script>
 </body>
 </html>
