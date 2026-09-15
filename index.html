@@ -1,33 +1,39 @@
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prototype 2B — Text Feedback</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prototype 2B</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="./script.js" defer></script>
 </head>
 <body>
-<header>
-<h1>Prototype 2B — Text Feedback</h1>
-<p>Step-by-step guidance for beginners</p>
-</header>
-<main>
-<a class="button secondary" href="../index.html">← Back</a>
+  <header>
+    <h1>Prototype 2B</h1>
+    <p>Text Feedback</p>
+    <a href="../assignment2.html">← Back to Assignment 2</a>
+  </header>
 
-<div class="panel">
-<h2>Guided Recording</h2>
-<p>This version communicates the system state mainly through short instructions.</p>
-<div id="guide" class="guide">Step 1 — Press Record.</div>
-<div class="controls">
-<button id="record">Record</button>
-<button id="stopRec" class="secondary">Stop Recording</button>
-<button id="play">Play</button>
-</div>
-</div>
+  <main>
+    <section class="panel">
+      <h2>Guided Recording</h2>
+      <p>Record a short sound, then listen to it.</p>
 
-</main>
-<footer>Loop Together · Parallel Prototype</footer>
-<script src="script.js"></script>
+      <div id="guide" class="guide" role="status">
+        Loading… If this message stays here, script.js has not loaded.
+      </div>
+
+      <div class="controls">
+        <button id="record" type="button" disabled>Record</button>
+        <button id="stopRec" type="button" disabled>Stop Recording</button>
+        <button id="play" type="button" disabled>Play</button>
+      </div>
+
+      <audio id="audio" controls hidden></audio>
+      <p>Recordings stay in this tab and disappear when you reload.</p>
+    </section>
+  </main>
+
+  <footer>Loop Together · Parallel Prototype</footer>
 </body>
 </html>
