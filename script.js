@@ -1,70 +1,124 @@
-let rec, chunks = [], audio, stream;
+function init() {
+  const guide = document.querySelector("#guide");
+  const recordBtn = document.querySelector("#record");
+  const stopBtn = document.querySelector("#stopRec");
+  const playBtn = document.querySelector("#play");
 
-const guide = document.querySelector("#guide");
-const recordBtn = document.querySelector("#record");
-const stopRecBtn = document.querySelector("#stopRec");
-const playBtn = document.querySelector("#play");
-
-async function setup() {
-  try {
-    stream = await navigator.mediaDevices.getUserMedia({
-      audio: {
-        echoCancellation: false,
-        noiseSuppression: false,
-        autoGainControl: true
-      }
-    });
-
-    rec = new MediaRecorder(stream);
-
-    rec.ondataavailable = e => {
-      if (e.data.size > 0) chunks.push(e.data);
-    };
-
-    rec.onstop = () => {
-      const blob = new Blob(chunks, { type: rec.mimeType });
-      chunks = [];
-
-      audio = new Audio(URL.createObjectURL(blob));
-      audio.volume = 1;
-
-      guide.textContent = "Step 3 — Your sound is ready. Press Play.";
-
-      stream.getTracks().forEach(track => track.stop());
-    };
-
-  } catch (error) {
-    console.error(error);
-    guide.textContent = "Microphone error: " + error.name;
-  }
-}
-
-recordBtn.onclick = async () => {
-  await setup();
-
-  chunks = [];
-  rec.start();
-
-  guide.textContent =
-    "Step 2 — Recording now. Make a short sound and press Stop Recording.";
-};
-
-stopRecBtn.onclick = () => {
-  if (rec && rec.state === "recording") {
-    rec.stop();
-    guide.textContent = "Processing your recording...";
-  }
-};
-
-playBtn.onclick = () => {
-  if (!audio) {
-    guide.textContent = "Please record a sound first.";
+  if (!guide || !recordBtn || !stopBtn || !playBtn) {
+    console.error("Check HTML IDs: guide, record, stopRec, play");
     return;
   }
 
-  audio.currentTime = 0;
-  audio.play();
+  let recorder;
+  let stream;
+  let audio;
+  let audioURL;
 
-  guide.textContent =
-    "Playing your sound. You can record another one when ready.";
-};
+  stopBtn.disabled = true;
+  playBtn.disabled = true;
+  guide.textContent = "Step 1 — Ready. Press Record.";
+
+  function releaseMicrophone() {
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop());
+      stream = null;
+    }
+  }
+
+  recordBtn.onclick = async function () {
+    recordBtn.disabled = true;
+    playBtn.disabled = true;
+    guide.textContent = "Opening microphone. Please allow access.";
+
+    if (audio) audio.pause();
+
+    try {
+      if (!navigator.mediaDevices?.getUserMedia ||
+          !window.MediaRecorder) {
+        throw new Error("Open the HTTPS website in a supported browser.");
+      }
+
+      stream = await navigator.mediaDevices.getUserMedia({
+        audio: true
+      });
+
+      const chunks = [];
+      const session = new MediaRecorder(stream);
+      recorder = session;
+
+      session.ondataavailable = function (event) {
+        if (event.data.size > 0) {
+          chunks.push(event.data);
+        }
+      };
+
+      session.onstop = function () {
+        releaseMicrophone();
+
+        const blob = new Blob(chunks, {
+          type: session.mimeType
+        });
+
+        recordBtn.disabled = false;
+        stopBtn.disabled = true;
+
+        if (!blob.size) {
+          guide.textContent = "No audio captured. Please try again.";
+          playBtn.disabled = !audio;
+          return;
+        }
+
+        if (audioURL) URL.revokeObjectURL(audioURL);
+
+        audioURL = URL.createObjectURL(blob);
+        audio = new Audio(audioURL);
+        playBtn.disabled = false;
+
+        guide.textContent = "Step 3 — Your sound is ready. Press Play.";
+
+        audio.onended = function () {
+          guide.textContent = "Finished. Play again or record another sound.";
+        };
+      };
+
+      session.start();
+      stopBtn.disabled = false;
+      guide.textContent = "Step 2 — Recording. Make a sound, then press Stop Recording.";
+    } catch (error) {
+      releaseMicrophone();
+      recordBtn.disabled = false;
+      stopBtn.disabled = true;
+      playBtn.disabled = !audio;
+
+      guide.textContent = "Microphone error: " + error.message;
+      console.error(error);
+    }
+  };
+
+  stopBtn.onclick = function () {
+    if (recorder?.state === "recording") {
+      stopBtn.disabled = true;
+      guide.textContent = "Preparing your recording...";
+      recorder.stop();
+    }
+  };
+
+  playBtn.onclick = async function () {
+    if (!audio) return;
+
+    try {
+      audio.currentTime = 0;
+      await audio.play();
+      guide.textContent = "Playing your sound...";
+    } catch (error) {
+      guide.textContent = "Playback error: " + error.message;
+    }
+  };
+}
+
+// Run after the HTML elements exist.
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
+}
